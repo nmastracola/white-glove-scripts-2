@@ -15,7 +15,9 @@ to a CSV file inside of the 'logs' directory.
 ##Find and Replace
 The Find and Replace script searches for all instances of a word inside of content pages and replaces it with a new word.
 
+##Creation
+The Creation script automatically creates assignments and requires you to place a prebuilt assignemnt csv into assignmentCreation directory in '/logs'
+
 ##Course Settings
 This requires you to upload a "provisioning report" csv file that you can download from your account settings page into the "input" 
 directory found inside of `/logs/courseSettings/input`.
-
