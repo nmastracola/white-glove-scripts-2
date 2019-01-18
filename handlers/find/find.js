@@ -68,8 +68,12 @@ const fs                = require("fs");
                 if(body !== null){
                     let searchIndex = body.indexOf(searchString)
                     if(searchIndex !== -1){
-                        console.log(style.color.ansi16m.hex("#E06666"), `Found it here, ${url}`, style.color.close)
-                        fs.appendFile(csvOutput, `${searchString}, ${title}, ${url}\n`, function(err) {});
+
+                        let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
+                        let matchedWords = body.match(searchWord);
+                        fs.appendFile(csvOutput, `${matchedWords[0]}, ${title}, ${url}\n`, function(err) {});
+                        console.log(style.color.ansi16m.hex("#E06666"), `Found it here: ${url}\n Context:  ${matchedWords[0]}`, style.color.close)
+
                     }
                 }
 
