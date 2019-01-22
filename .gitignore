@@ -1,0 +1,3 @@
+# exclude the following
+    config/config.js
+    .gitignore
