@@ -73,7 +73,7 @@ const fs                = require("fs");
                         let matchedWords = body.match(searchWord);
                         console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
                         for (i = 0; i < matchedWords.length; i++){
-                              fs.appendFile(csvOutput, `${searchString}, ${title}, ${url}, ${matchedWords[i]}\n`, function(err) {});
+                              fs.appendFile(csvOutput, `${searchString}, ${title.replace(new RegExp(,g), "_")}, ${url}, ${matchedWords[i]}\n`, function(err) {});
                               console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
                         }
                     }
