@@ -1,9 +1,4 @@
-<<<<<<< HEAD
+# exclude the following
 /node_modules
 config.js
 /logs
-=======
-# exclude the following
-    config/config.js
-    .gitignore
->>>>>>> 603946db61885e87c6d0740781bfd4513b48dfb9
