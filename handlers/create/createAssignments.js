@@ -1,6 +1,6 @@
 
 const { prompt }        = require('enquirer');
-const cli               = require("./cli-questions")
+const cli               = require("./cli-questions.js")
 const axios             = require("axios")
 const style             = require("ansi-styles");
 const config            = require ("../../config/config")
