@@ -1,3 +1,4 @@
 # exclude the following
-    config/config.js
-    .gitignore
+/node_modules
+config.js
+/logs

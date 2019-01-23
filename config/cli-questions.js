@@ -6,7 +6,7 @@ module.exports = {
                 type: 'select',
                 name: 'script',
                 message: 'What Script do you want to run?',
-                choices:["Find", "Find and Replace", "Course Settings"]
+                choices:["Find", "Find and Replace","Create Assignments", "Course Settings"]
               }, 
             
     ]
