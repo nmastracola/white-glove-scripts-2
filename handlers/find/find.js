@@ -9,7 +9,7 @@ const throttle          = throttledQueue(5, 1000, true);
 const token             = config.token
 const csvOutput         = `./logs/find/output.csv`;
 const fs                = require("fs");
- 
+
 
   const getPages = (answers)=>{
     prompt(cli.findQuestions)
@@ -71,9 +71,11 @@ const fs                = require("fs");
 
                         let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
                         let matchedWords = body.match(searchWord);
-                        fs.appendFile(csvOutput, `${matchedWords[0]}, ${title}, ${url}\n`, function(err) {});
-                        console.log(style.color.ansi16m.hex("#E06666"), `Found it here: ${url}\n Context:  ${matchedWords[0]}`, style.color.close)
-
+                        console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
+                        for (i = 0; i < matchedWords.length; i++){
+                              fs.appendFile(csvOutput, `${searchString}, ${title}, ${url}, ${matchedWords[i]}\n`, function(err) {});
+                              console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
+                        }
                     }
                 }
 
