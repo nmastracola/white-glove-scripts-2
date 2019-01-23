@@ -18,7 +18,7 @@ to a CSV file inside of the 'logs' directory.
 
 The Find and Replace script searches for all instances of a word inside of content pages and replaces it with a new word.
 
-### Creation
+### Create Assignments
 
 The Creation script automatically creates assignments and requires you to place a prebuilt assignment csv into the directory in `/logs/assignmentCreation`
 
