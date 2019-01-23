@@ -17,7 +17,7 @@ prompt(cli.questions)
     }else if(answers.script === "Find and Replace"){
         replace.getPages(answers)
     }else if(answers.script === "Create Assignments") {
-        create //put method here
+        create.writeAssignments(answers)
     }else if(answers.script === "Course Settings"){
         settings.updateCourse(answers)
     }
