@@ -72,8 +72,9 @@ const fs                = require("fs");
                         let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
                         let matchedWords = body.match(searchWord);
                         console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
+                        var titleNoComma = title.replace(new RegExp(/\,g/), "_") //get rid of the comma for the CSV
                         for (i = 0; i < matchedWords.length; i++){
-                              fs.appendFile(csvOutput, `${searchString}, ${title}, ${url}, ${matchedWords[i]}\n`, function(err) {});
+                              fs.appendFile(csvOutput, `${searchString}, ${titleNoComma}, ${url}, ${matchedWords[i]}\n`, function(err) {});
                               console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
                         }
                     }
