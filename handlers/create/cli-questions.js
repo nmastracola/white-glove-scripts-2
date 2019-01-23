@@ -17,7 +17,7 @@ module.exports = {
            {
             type: 'confirm',
             name: 'csv_upload_confirm',
-            message: 'Did you place your csv file into "/log/assignmentCreation"?'
+            message: 'Did you place your csv file into "/logs/assignmentCreation"?'
            },
     ]
 }
