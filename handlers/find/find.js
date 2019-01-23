@@ -10,7 +10,6 @@ const token             = config.token
 const csvOutput         = `./logs/find/output.csv`;
 const fs                = require("fs");
 
-
   const getPages = (answers)=>{
     prompt(cli.findQuestions)
     .then(answers =>{
@@ -43,6 +42,7 @@ const fs                = require("fs");
   }
 
 
+
   const pages =(data, domain, courseNumber, searchString)=>{
 
     let pages = data
@@ -72,7 +72,7 @@ const fs                = require("fs");
                         let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
                         let matchedWords = body.match(searchWord);
                         console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
-                        var titleNoComma = title.replace(new RegExp(/\,g/), "_") //get rid of the comma for the CSV
+                        var titleNoComma = title.replace(new RegExp(/,/g), "_") //get rid of the comma for the CSV
                         for (i = 0; i < matchedWords.length; i++){
                               fs.appendFile(csvOutput, `${searchString}, ${titleNoComma}, ${url}, ${matchedWords[i]}\n`, function(err) {});
                               console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
