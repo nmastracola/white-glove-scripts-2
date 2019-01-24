@@ -1,4 +1,4 @@
 # exclude the following
 /node_modules
-config.js
+/config/config.js
 /logs
