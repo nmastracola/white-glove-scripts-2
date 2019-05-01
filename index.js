@@ -8,6 +8,7 @@ const bulkFind  = require("./handlers/bulkFind/bulkFind.js")
 const replace   = require("./handlers/replace/findAndReplace")
 const create    = require("./handlers/create/createAssignments")
 const settings  = require("./handlers/settings/courseSettings")
+const remove    = require("")
  
 prompt(cli.questions)
 
@@ -23,6 +24,8 @@ prompt(cli.questions)
         create.writeAssignments(answers)
     }else if(answers.script === "Course Settings"){
         settings.updateCourse(answers)
+    }else if(answers.script === "Banner Removal"){
+        bannerRemove.getPages(answers)
     }
 
   })
