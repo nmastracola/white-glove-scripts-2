@@ -9,7 +9,7 @@ const token             = config.token
 const csvOutput         = `./logs/find/output.csv`;
 const fs                = require("fs");
 
-const getPages = (answers)=>{
+  const getPages = (answers)=>{
     prompt(cli.findQuestions)
     .then(answers =>{
 
