@@ -9,46 +9,37 @@ const token             = config.token
 const csvOutput         = `./logs/find/output.csv`;
 const fs                = require("fs");
 
-const pageGet = (answers) => {
+const getPages = (answers)=>{
+    prompt(cli.findQuestions)
+    .then(answers =>{
 
-    let domain          = answers.domain
-    let courseNumber    = answers.courseNumber
-    let searchString    = answers.searchString.toLowerCase()
-    let pageNumber      = 1
+        let domain          = answers.domain
+        let courseNumber    = answers.courseNumber
+        let searchString    = answers.searchString.toLowerCase()
+        let pageNumber      = 1
 
-    const get = () => { 
+        const getPages=()=>{
 
-        let headers = {
-            url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/pages?per_page=100&page=${pageNumber}`,
-            headers: { Authorization: `Bearer ${token}`}
+            let headers = {
+                url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/pages?per_page=100&page=${pageNumber}`,
+                headers: { Authorization: `Bearer ${token}`}
+            }
+
+            axios(headers).then(function(response){
+                pages(response.data, domain, courseNumber, searchString)
+                if(response.data.length ===100){
+                    pageNumber++
+                    getPages()
+                }
+            }).catch(function(error){console.log(error.status)})
         }
 
-        axios(headers).then(function(response){
-            pages(response.data, domain, courseNumber, searchString)
-            if(response.data.length ===100){
-                pageNumber++
-                get()
-            }
-        }).catch(function(error){console.log(error.status)})
-    }
-    get()
-}
+        getPages()
 
-
-const getPages = (answers) =>{
-
-    if (!answers) {
-        prompt(cli.findQuestions)
-        .then(answers =>{
-
-            pageGet(answers)
-
-        })
-        .catch(function(error){console.log(error)});
-    } else {
-        pageGet(answers)
+    })
+    .catch(function(error){console.log(error)});
   }
-}
+
 
 
   const pages =(data, domain, courseNumber, searchString)=>{
@@ -70,25 +61,24 @@ const getPages = (answers) =>{
                 let body = response.data.body.toLowerCase()
                 let title = response.data.title
                 let url = response.data.html_url
-
-                console.log(`checking page: ${title}`)
+                let regex = /courses\/(.*)\/pages/;
+                let course_number = regex.exec(url);
+                
+                console.log(`checking page: ${title} on course` + style.color.ansi16m.hex("#ffff00"), `${course_number[1]}`, style.color.close)
 
                 if(body !== null){
                     let searchIndex = body.indexOf(searchString)
-                    if(body !== null){
-                        let searchIndex = body.indexOf(searchString)
-                        if(searchIndex !== -1){
-    
-                            let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
-                            let matchedWords = body.match(searchWord);
-                            console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
-                            var titleNoComma = title.replace(new RegExp(/,/g), "_") //get rid of the comma for the CSV
-                            for (i = 0; i < matchedWords.length; i++){
-                                  fs.appendFile(csvOutput, `${searchString}, ${titleNoComma}, ${url}, ${matchedWords[i]}\n`, function(err) {});
-                                  console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
-                            }
+                    if(searchIndex !== -1){
+
+                        let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
+                        let matchedWords = body.match(searchWord);
+                        console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
+                        var titleNoComma = title.replace(new RegExp(/,/g), "_") //get rid of the comma for the CSV
+                        for (i = 0; i < matchedWords.length; i++){
+                              fs.appendFile(csvOutput, `${searchString}, ${titleNoComma}, ${url}, ${matchedWords[i]}\n`, function(err) {});
+                              console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
                         }
-                    }
+                    } 
                 }
 
             }).catch(function(error){console.log(error.status)})
@@ -96,7 +86,6 @@ const getPages = (answers) =>{
     })
   }
 
+module.exports = { getPages }
 
 
-
-  module.exports = { getPages }
