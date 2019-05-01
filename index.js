@@ -3,12 +3,12 @@ const { prompt } = require('enquirer');
 const cli = require("./config/cli-questions")
 
 ////// HANDLERS //////////
-const find      = require("./handlers/find/find.js")
-const bulkFind  = require("./handlers/bulkFind/bulkFind.js")
-const replace   = require("./handlers/replace/findAndReplace")
-const create    = require("./handlers/create/createAssignments")
-const settings  = require("./handlers/settings/courseSettings")
-const remove    = require("")
+const find            = require("./handlers/find/find.js")
+const bulkFind        = require("./handlers/bulkFind/bulkFind.js")
+const replace         = require("./handlers/replace/findAndReplace")
+const create          = require("./handlers/create/createAssignments")
+const settings        = require("./handlers/settings/courseSettings")
+const bannerRemove    = require("./handlers/bannerRemove/bannerRemove")
  
 prompt(cli.questions)
 
