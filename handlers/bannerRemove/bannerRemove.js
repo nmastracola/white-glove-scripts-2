@@ -73,13 +73,18 @@ const fs                = require("fs");
                     // if(searchIndex !== -1){
                     let matchStrings = body.match(searchStringGlobal)
                     if ((match = searchStringGlobal.exec(body)) !== null) {
-                        let replaceMatches = matchStrings[0].match(new RegExp(replaceString, 'i'))
+                        // let replaceMatches = matchStrings[0].match(new RegExp(replaceString, 'i'))
                         
+                        // Use this if replacing with a portion of the found item, eg. the UTA banner title
+                        // let replaceHTML = replaceMatches[0] 
+                        // Same as above except with extra HTML formatting for a new header
                         // let replaceHTML = '<h2><span style="color: #003366;">' + replaceMatches[0] + '</span></h2>\n<hr />'
-                        let replaceHTML = replaceMatches[0] 
 
                         let newBody = body
-                        newBody = newBody.replace(searchStringGlobal, replaceHTML)
+                        // Use this if replacing with user input
+                        newBody = newBody.replace(searchStringGlobal, replaceString)
+                        // Use this if replacing with a portion of the found item, eg. the UTA banner title
+                        // newBody = newBody.replace(searchStringGlobal, replaceHTML)
 
                         let putHeaders = {
                             url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/pages/${pageId}`,

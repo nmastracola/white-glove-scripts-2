@@ -9,6 +9,7 @@ const replace         = require("./handlers/replace/findAndReplace")
 const create          = require("./handlers/create/createAssignments")
 const settings        = require("./handlers/settings/courseSettings")
 const bannerRemove    = require("./handlers/bannerRemove/bannerRemove")
+const rubricFlip      = require("./handlers/rubricFlip/flip")
  
 prompt(cli.questions)
 
@@ -26,6 +27,8 @@ prompt(cli.questions)
         settings.updateCourse(answers)
     }else if(answers.script === "Banner Removal"){
         bannerRemove.getPages(answers)
+    }else if(answers.script === "Rubric Flip"){
+        flip.getRubric(answers)
     }
 
   })
