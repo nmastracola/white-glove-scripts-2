@@ -7,16 +7,17 @@ const throttledQueue    = require('throttled-queue');
 const throttle          = throttledQueue(5, 1000, true);
 const token             = config.token
 
-  const getRubric = (answers)=>{
+
+  const rubricFlip = (answers)=>{
     prompt(cli.findQuestions)
     .then(answers =>{
 
         let domain          = answers.domain
         let courseNumber    = answers.courseNumber
-        let rubricID    = answers.rubricID
-        let pageNumber      = 1
+        let rubricID        = answers.rubricID
 
-        const rubricFlip=()=>{
+        
+        const getRubric = ()=>{
 
             let headers = {
                 url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/rubrics/${rubricID}`,
@@ -24,65 +25,58 @@ const token             = config.token
             }
 
             axios(headers).then(function(response){
-                rubrics(response.data, domain, courseNumber, searchString)
-                if(response.data.length ===100){
-                    pageNumber++
-                    getPages()
-                }
-            }).catch(function(error){console.log(error.status)})
+
+                rubric(response.data, domain, courseNumber, rubricID)
+    
+            }).catch(function(error){console.log("Beep boop " + error)})
         }
 
-        getPages()
+        getRubric();
 
     })
-    .catch(function(error){console.log(error)});
+    .catch(function(error){console.log("Boop beep" + error)
+    })
   }
 
 
 
-  const rubrics =(data, domain, courseNumber, searchString)=>{
+  const rubric = (response, domain, courseNumber, rubricID) => {
 
-    let rubrics = data
-
-    pages.forEach(page=>{
-
-        let pageId = page.url
-
-        let headers = {
-            url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/pages/${pageId}`,
-            headers: {Authorization: `Bearer ${token}`}
+    let rubrics = response.data
+    
+    rubrics.forEach(rubric => {
+            rubric.ratings.reverse();
+            let ratingsMap = new Map(Object.entries(rubric.ratings))
+            rubric.ratings = ratingsMap
         }
+    )
+    
+    const rubricHash = new Map(Object.entries(rubrics))
 
-        throttle(function() {
-            axios(headers).then(function(response){
+    
+    let postHeaders = {
+        url: `https://${domain}.instructure.com/api/v1/courses/${courseNumber}/rubrics/`,
+        method: "post",
+        headers: { Authorization: `Bearer ${token}`},
+        data: {
+            "rubric[title]": `${response.title} flipped`,
+            "rubric[criteria]" : rubricHash
+        }
+    }
 
-                let body = response.data.body.toLowerCase()
-                let title = response.data.title
-                let url = response.data.html_url
-                let regex = /courses\/(.*)\/pages/;
-                let course_number = regex.exec(url);
-                
-                console.log(`checking page: ${title} on course` + style.color.ansi16m.hex("#ffff00"), `${course_number[1]}`, style.color.close)
+    // console.log(putHeaders)
 
-                if(body !== null){
-                    let searchIndex = body.indexOf(searchString)
-                    if(searchIndex !== -1){
+    axios(postHeaders)
+        .then(function(response){
+            console.log("ding " + response.status)
+            // console.dir(response, {depth: null})
+            // if(response.status === 200){
+            //     console.log("Success " + response)
+            // }
+            
+        }).catch(function(error){console.log("Oh no " + error)})
 
-                        let searchWord = new RegExp('[^\\s"]*' + searchString + '[^\\s"]*', "g");
-                        let matchedWords = body.match(searchWord);
-                        console.log(style.color.ansi16m.hex("#E06666"), `Found "${searchString}" at ${url}`, style.color.close)
-                        var titleNoComma = title.replace(new RegExp(/,/g), "_") //get rid of the comma for the CSV
-                        for (i = 0; i < matchedWords.length; i++){
-                              fs.appendFile(csvOutput, `${searchString}, ${titleNoComma}, ${url}, ${matchedWords[i]}\n`, function(err) {});
-                              console.log(style.color.ansi16m.hex("#E06666"), `${i+1}) ${matchedWords[i]}`, style.color.close)
-                        }
-                    } 
-                }
-
-            }).catch(function(error){console.log(error.status)})
-        })
-    })
-  }
+}
 
 module.exports = { rubricFlip }
 
