@@ -26,3 +26,7 @@ The Creation script automatically creates assignments and requires you to place 
 
 This requires you to upload a "provisioning report" csv file that you can download from your account settings page into the "input" 
 directory found inside of `/logs/courseSettings/input`.
+
+### Banner Removal
+
+This script works similarly to **Find and Replace**. It is mainly intended to find and replace banners using *Regular Expressions*
